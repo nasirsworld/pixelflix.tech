@@ -1,3 +1,17 @@
+//<-----Preloader------------>
+
+window.addEventListener("load", function () {
+  const loader = document.getElementById("loader");
+  setTimeout(() => {
+    loader.style.opacity = 0;
+    loader.style.visibility = "hidden";
+    loader.style.pointerEvents = "none";
+  }, 1000); // 2 seconds delay after page load
+});
+
+
+
+
 //<---------------------Nav Bar-------------------------->
 
     // Hamburger Toggle for Mobile Navigation
