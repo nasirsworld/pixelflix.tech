@@ -1,0 +1,308 @@
+/* Pixel Loader Styles */
+.loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0d0d0d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  
+  .pixel-loader {
+    display: grid;
+    grid-template-columns: repeat(3, 20px);
+    grid-gap: 5px;
+  }
+  
+  .pixel-loader span {
+    width: 20px;
+    height: 20px;
+    background: #ff7b00;
+    animation: pixelPulse 1.2s infinite ease-in-out;
+    border-radius: 4px;
+    box-shadow: 0 0 10px #ff820d;
+  }
+  
+  .pixel-loader span:nth-child(1) { animation-delay: 0s; }
+  .pixel-loader span:nth-child(2) { animation-delay: 0.1s; }
+  .pixel-loader span:nth-child(3) { animation-delay: 0.2s; }
+  .pixel-loader span:nth-child(4) { animation-delay: 0.3s; }
+  .pixel-loader span:nth-child(5) { animation-delay: 0.4s; }
+  .pixel-loader span:nth-child(6) { animation-delay: 0.5s; }
+  .pixel-loader span:nth-child(7) { animation-delay: 0.6s; }
+  .pixel-loader span:nth-child(8) { animation-delay: 0.7s; }
+  .pixel-loader span:nth-child(9) { animation-delay: 0.8s; }
+  
+  @keyframes pixelPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.4);
+      opacity: 1;
+    }
+  }
+  
+  
+  /* ===================================================
+     Branding Variables & Typography
+  =================================================== */
+  :root {
+    /* Color Palette */
+    --color-background: #121212;      /* Primary background */
+    --color-surface: #1f1f1f;         /* Header, footer, and surface elements */
+    --color-accent: #ff9800;          /* Accents, buttons, hover states */
+    --color-hover: #e68900;           /* Alternate hover color */
+    --color-text: #eee;               /* General text color */
+  
+    /* Font Settings */
+    --font-primary: 'Roboto', sans-serif;       /* For regular text (paragraphs) */
+    --font-heading: 'Press Start 2P', cursive;    /* Gaming text style for headings */
+  
+    /* Typography Sizes */
+    --heading1-size: 3rem;         /* Main heading (H1) */
+    --heading2-size: 2.5rem;       /* Secondary headings (H2) */
+    --heading3-size: 2rem;         /* Tertiary headings (H3) */
+    --para-size: 1rem;             /* Paragraph text size */
+    --small-text-size: 0.875rem;    /* For small text, captions, etc. */
+  
+    /* Other Variables */
+    --transition-speed: 0.3s;       /* Standard transition duration */
+    --header-height: 70px;          /* Used for responsive navigation & header height */
+  }
+  
+  /* ===================================================
+     Global Styles & Resets
+  =================================================== */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: var(--font-primary);
+    font-size: var(--para-size);
+    line-height: 1.6;
+    color: var(--color-text);
+    background-color: var(--color-background);
+  }
+  
+  /* Headings */
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  /* Custom Gaming Headings using our gaming font */
+  h1 {
+    font-family: var(--font-heading);
+    font-size: var(--heading1-size);
+  }
+  
+  h2 {
+    font-family: var(--font-heading);
+    font-size: var(--heading2-size);
+  }
+  
+  h3 {
+    font-family: var(--font-heading);
+    font-size: var(--heading3-size);
+  }
+  
+  /* Paragraph */
+  p {
+    font-size: var(--para-size);
+    margin-bottom: 1rem;
+  }
+  
+  /* ===================================================
+     Container & Structure
+  =================================================== */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    /* margin: auto; */
+    padding: 2rem 0;
+    border-radius: 10px;
+  }
+  
+  .site-header {
+    background-color: none;
+    padding: 1rem 0;
+    /* box-shadow: 0 4px 8px -4px rgb(255, 149, 11); */
+    /* border: 1px solid #ffffff; */
+    position: relative;
+    /* margin-top: 20px; Adjust this value to increase/decrease the gap from the top */
+    border-radius: 50px; /* Modify the value as needed for the desired curvature */
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    /* margin: auto; */
+    padding: 0 1rem;
+    border-radius: 10px;
+  }
+  
+  /* Logo */
+  .logo img {
+    width: 50px;
+    margin: 15px;
+    border-radius: 10px;
+  }
+  
+  /* NAVIGATION WRAPPER */
+  .nav-wrapper {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Navigation Links (Desktop) */
+  .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links li a {
+    text-decoration: none;
+    color: var(--color-text);
+    font-size: 1rem;
+    padding: 0.5rem;
+    transition: color var(--transition-speed), text-shadow var(--transition-speed);
+  }
+  
+  .nav-links li a:hover {
+    color: white;
+    text-shadow: 0 0 5px var(--color-accent), 0 0 10px var(--color-accent);
+  }
+  
+  /* Special Donate Button with Pulse Animation */
+  .donate-btn {
+    background-color: var(--color-accent);
+    color: white;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+    animation: breathingPulse 2s infinite;
+  }
+  
+  .donate-btn:hover {
+    background-color: var(--color-accent);
+    color:white;
+    transform: scale(1.8);
+  }
+  
+  /* Hamburger Icon */
+  .hamburger {
+    display: none;  /* Hidden on desktop */
+    flex-direction: column;
+    cursor: pointer;
+    margin-left: auto;
+  }
+  
+  .hamburger span {
+    height: 3px;
+    width: 25px;
+    background: var(--color-text);
+    margin-bottom: 4px;
+    border-radius: 3px;
+    transition: all var(--transition-speed) ease;
+  }
+  
+  /* ===================================================
+     ANIMATIONS
+  =================================================== */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes breathingPulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.788);
+    }
+    50% {
+      transform: scale(1.5);
+      box-shadow: 0 0 30px rgb(255, 255, 255);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 10px rgb(255, 255, 255);
+    }
+  }
+  
+  /* ===================================================
+     RESPONSIVE STYLES
+  =================================================== */
+  @media (max-width: 768px) {
+    /* Display hamburger icon on mobile */
+    .hamburger {
+      display: flex;
+    }
+  
+    /* Hide navigation links by default on mobile */
+  .nav-links {
+    position: absolute;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    display: none;
+    z-index: 9999; /* Ensures menu is above hero text */
+  }
+  
+  .nav-links a {
+    display: block; /* Makes the entire link area clickable */
+  }
+  
+  .nav-links.active {
+    display: flex; /* Reveals menu when active */
+  }
+  
+  /* Ensure header container remains relatively positioned */
+  .header-container {
+    position: relative;
+  }}
+  
+  .hero {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  /* Common styles for parallax layers */
+  .parallax-layer {
+    position: absolute;
+    width: 100%;
+    height: 120%; /* Extra height for parallax movement */
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
