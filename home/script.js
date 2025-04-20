@@ -6,7 +6,7 @@ window.addEventListener("load", function () {
     loader.style.opacity = 0;
     loader.style.visibility = "hidden";
     loader.style.pointerEvents = "none";
-  }, 1000); // 2 seconds delay after page load
+  }); // 2 seconds delay after page load
 });
 
 
