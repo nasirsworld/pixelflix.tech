@@ -1,322 +1,1559 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Game On for a Cause - Home</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>PixelFlixLive - Game On for a Cause</title>
 
-<!-- YOUR EXISTING HEAD LINKS… -->
-<link rel="stylesheet" href="home/style.css" />
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-<link rel="icon" href="images/hero images/cclogo.png" type="image/x-icon" />
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-somehash==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="icon" type="image/x-icon" href="assests/home/fevicon.png">
 
-<!-- In the <head> section of your HTML -->
-<link rel="icon" type="image/png" href="assests/home/fevicon.png">
+    <style>
+        /* ===================================================
+           THEME VARIABLES & RESET
+        =================================================== */
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #0f0f0f;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            
+            --accent: #ff7b00;
+            --accent-glow: rgba(255, 123, 0, 0.6);
+            --accent-secondary: #00d2ff;
+            
+            --glass-bg: rgba(20, 20, 20, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            
+            --font-body: 'Poppins', sans-serif;
+            --font-display: 'Rajdhani', sans-serif;
+            --font-gaming: 'Press Start 2P', cursive;
+            
+            --transition-speed: 0.4s;
+            --bottom-nav-height: 70px;
+        }
+
+        /* Light Mode Overrides */
+        [data-theme="light"] {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e4e6eb;
+            --text-primary: #050505;
+            --text-secondary: #555555;
+            --accent: #ff6600;
+            --accent-glow: rgba(255, 102, 0, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent; /* Remove mobile tap highlight */
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        a { text-decoration: none; color: inherit; transition: var(--transition-speed); }
+        ul { list-style: none; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+        /* ===================================================
+           ANIMATIONS & UTILS
+        =================================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); text-shadow: -2px 0 red, 2px 0 blue; }
+            25% { transform: translate(-2px, 2px); text-shadow: -2px -2px red, 2px 2px blue; }
+            50% { transform: translate(2px, -2px); text-shadow: 2px 2px red, -2px -2px blue; }
+            75% { transform: translate(-2px, -2px); text-shadow: -2px 2px red, 2px -2px blue; }
+            100% { transform: translate(0); text-shadow: -2px 0 red, 2px 0 blue; }
+        }
+
+        .glitch-text {
+            position: relative;
+        }
+        .glitch-text:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
+
+        /* ===================================================
+           LOADER
+        =================================================== */
+        .loader-wrapper {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-text {
+            font-family: var(--font-gaming);
+            color: var(--accent);
+            font-size: 1.5rem;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ===================================================
+           HEADER (DESKTOP)
+        =================================================== */
+        header {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 5000;
+            padding: 15px 0;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+        header.scrolled {
+            background: var(--glass-bg);
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        .header-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo span { color: var(--accent); }
+
+        nav ul { display: flex; gap: 40px; }
+        nav a {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0; width: 0%; height: 2px;
+            background: var(--accent);
+            transition: 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+
+        .header-actions { display: flex; align-items: center; gap: 20px; }
+
+        .btn-donate {
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 25px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-family: var(--font-display);
+            letter-spacing: 1px;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            transition: 0.3s;
+        }
+        .btn-donate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--accent-glow);
+            background: #fff;
+            color: var(--accent);
+        }
+
+        /* ===================================================
+           MOBILE BOTTOM NAVIGATION (APP FEEL)
+        =================================================== */
+        .mobile-bottom-nav {
+            display: none; /* Hidden on desktop */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--bottom-nav-height);
+            background: rgba(10, 10, 10, 0.85); /* Dark Glass */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            z-index: 9999;
+            padding-bottom: env(safe-area-inset-bottom); /* iOS Home Bar Safe Area */
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+
+        .bottom-nav-links {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            padding: 0 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            font-weight: 500;
+            gap: 4px;
+            padding: 5px;
+            width: 60px;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-item i {
+            font-size: 1.3rem;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item.active i {
+            transform: translateY(-3px);
+            filter: drop-shadow(0 0 5px var(--accent-glow));
+        }
+
+        /* Indicator dot for active state */
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--accent);
+        }
+
+
+        /* ===================================================
+           HERO SECTION - FIXED OVERLAP & ANIMATIONS
+        =================================================== */
+        .carousel {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            margin-top: -50px;
+        }
+
+        .carousel .list .item {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0 0 0 0;
+        }
+
+        .carousel .list .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Dark overlay */
+        .carousel .list .item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, #000000 90%);
+            pointer-events: none;
+        }
+
+        /* Content Visibility Logic */
+        .carousel .list .item .content {
+            position: absolute;
+            top: 20%;
+            width: 1140px;
+            max-width: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding-right: 30%;
+            box-sizing: border-box;
+            color: #fff;
+            text-shadow: 0 5px 10px rgba(0,0,0,0.5);
+            z-index: 2;
+            opacity: 0; 
+            pointer-events: none;
+        }
+
+        /* Only show content for the active (first) item */
+        .carousel .list .item:nth-child(1) .content {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .carousel .list .item .author {
+            font-weight: bold;
+            letter-spacing: 10px;
+            font-family: var(--font-gaming);
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .carousel .list .item .title,
+        .carousel .list .item .topic {
+            font-size: 5em;
+            font-weight: bold;
+            line-height: 1.1em;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+        }
+
+        .carousel .list .item .topic { color: var(--accent); }
+
+        .carousel .list .item .des {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            color: #eee;
+            backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .carousel .list .item .buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 160px);
+            grid-template-rows: 50px;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .carousel .list .item .buttons button {
+            border: none;
+            background-color: #eee;
+            letter-spacing: 3px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+        }
+
+        .carousel .list .item .buttons button:hover {
+            background-color: var(--accent);
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .carousel .list .item .buttons button:nth-child(2) {
+            background-color: transparent;
+            border: 1px solid #fff;
+            color: #eee;
+        }
+
+        /* THUMBNAIL */
+        .thumbnail {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            width: max-content;
+            z-index: 100;
+            display: flex;
+            gap: 20px;
+        }
+
+        .thumbnail .item {
+            width: 150px;
+            height: 220px;
+            flex-shrink: 0;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: 0.3s;
+        }
+        
+        .thumbnail .item:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+
+        .thumbnail .item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail .item .content {
+            color: #fff;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            padding: 5px;
+            border-radius: 10px;
+            z-index: 3;
+            /* Reset positioning for thumbnails */
+            top: auto; width: auto; transform: none; opacity: 1; pointer-events: none;
+        }
+
+        .thumbnail .item .content .title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        /* ARROWS */
+        .arrows {
+            position: absolute;
+            top: 80%;
+            right: 52%;
+            z-index: 100;
+            width: 300px;
+            max-width: 30%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .arrows button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            font-family: monospace;
+            font-weight: bold;
+            transition: .5s;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            display: grid; place-items: center;
+        }
+
+        .arrows button:hover {
+            background-color: var(--accent);
+            color: #000;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* =========================
+           CAROUSEL ANIMATION LOGIC
+        ========================= */
+        
+        .carousel .list .item:nth-child(1) {
+            z-index: 1;
+        }
+
+        /* Animations for active item content */
+        .carousel .list .item:nth-child(1) .content .author,
+        .carousel .list .item:nth-child(1) .content .title,
+        .carousel .list .item:nth-child(1) .content .topic,
+        .carousel .list .item:nth-child(1) .content .des,
+        .carousel .list .item:nth-child(1) .content .buttons {
+            transform: translateY(50px);
+            filter: blur(20px);
+            opacity: 0;
+            animation: showContent .5s 1s linear 1 forwards;
+        }
+
+        @keyframes showContent {
+            to {
+                transform: translateY(0px);
+                filter: blur(0px);
+                opacity: 1;
+            }
+        }
+
+        .carousel .list .item:nth-child(1) .content .title { animation-delay: 1.2s!important; }
+        .carousel .list .item:nth-child(1) .content .topic { animation-delay: 1.4s!important; }
+        .carousel .list .item:nth-child(1) .content .des { animation-delay: 1.6s!important; }
+        .carousel .list .item:nth-child(1) .content .buttons { animation-delay: 1.8s!important; }
+
+        /* NEXT CLICK: Zoom Effect */
+        .carousel.next .list .item:nth-child(1) img {
+            width: 150px;
+            height: 220px;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            border-radius: 30px;
+            animation: showImage .5s linear 1 forwards;
+        }
+
+        @keyframes showImage {
+            to {
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 0;
+            }
+        }
+
+        .carousel.next .thumbnail .item:nth-last-child(1) {
+            overflow: hidden;
+            animation: showThumbnail .5s linear 1 forwards;
+        }
+        
+        .carousel.prev .list .item img {
+            z-index: 100;
+        }
+
+        @keyframes showThumbnail {
+            from { width: 0; opacity: 0; }
+        }
+
+        .carousel.next .thumbnail {
+            animation: effectNext .5s linear 1 forwards;
+        }
+
+        @keyframes effectNext {
+            from { transform: translateX(150px); }
+        }
+
+        /* TIME BAR */
+        .carousel .time {
+            position: absolute;
+            z-index: 1000;
+            width: 0%;
+            height: 3px;
+            background-color: var(--accent);
+            left: 0;
+            top: 0;
+        }
+
+        .carousel.next .time,
+        .carousel.prev .time {
+            animation: runningTime 3s linear 1 forwards;
+        }
+
+        @keyframes runningTime {
+            from { width: 100%}
+            to {width: 0}
+        }
+
+        /* PREV CLICK */
+        .carousel.prev .list .item:nth-child(2) {
+            z-index: 2;
+        }
+
+        .carousel.prev .list .item:nth-child(2) img {
+            animation: outFrame 0.5s linear 1 forwards;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        @keyframes outFrame {
+            to {
+                width: 150px;
+                height: 220px;
+                bottom: 50px;
+                left: 50%;
+                border-radius: 20px;
+            }
+        }
+
+        .carousel.prev .thumbnail .item:nth-child(1) {
+            overflow: hidden;
+            opacity: 0;
+            animation: showThumbnail .5s linear 1 forwards;
+        }
+
+        .carousel.next .arrows button,
+        .carousel.prev .arrows button {
+            pointer-events: none;
+        }
+
+        .carousel.prev .list .item:nth-child(2) .content .author,
+        .carousel.prev .list .item:nth-child(2) .content .title,
+        .carousel.prev .list .item:nth-child(2) .content .topic,
+        .carousel.prev .list .item:nth-child(2) .content .des,
+        .carousel.prev .list .item:nth-child(2) .content .buttons {
+            animation: contentOut 1.5s linear 1 forwards!important;
+        }
+
+        @keyframes contentOut {
+            to {
+                transform: translateY(-150px);
+                filter: blur(20px);
+                opacity: 0;
+            }
+        }
+
+        /* ===================================================
+           BENTO GRID SECTION (ABOUT)
+        =================================================== */
+        .section-padding { padding: 100px 0; }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: auto;
+        }
+        .text-accent { color: var(--accent); }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 300px);
+            gap: 20px;
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .bento-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .bento-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .bento-large { grid-column: span 2; grid-row: span 2; }
+        .bento-medium { grid-column: span 2; }
+        
+        .bento-bg {
+            position: absolute; inset: 0;
+            object-fit: cover; width: 100%; height: 100%;
+            opacity: 0.2; transition: 0.5s;
+        }
+        .bento-item:hover .bento-bg { opacity: 0.4; transform: scale(1.1); }
+        
+        .bento-content { position: relative; z-index: 2; pointer-events: none;}
+        .bento-icon { font-size: 3rem; color: var(--accent); margin-bottom: 20px; }
+        .bento-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
+        .bento-desc { font-size: 0.95rem; color: #ccc; line-height: 1.5; }
+
+        /* ===================================================
+           STATS SECTION
+        =================================================== */
+        .stats-strip {
+            background: var(--accent);
+            padding: 60px 0;
+            margin: 50px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .stats-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            position: relative; z-index: 2;
+        }
+        .stat-item { text-align: center; color: #000; }
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+        .stat-label {
+            font-family: var(--font-gaming);
+            font-size: 0.8rem;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+        .stats-bg-pattern {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.1) 10px, rgba(0,0,0,0.1) 20px);
+        }
+
+        /* ===================================================
+           SKILLS (THE ARSENAL)
+        =================================================== */
+        .arsenal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .skill-card {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+        }
+        .skill-card:hover {
+            transform: translateY(-10px);
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+        }
+
+        .skill-icon-wrap {
+            width: 80px; height: 80px;
+            margin: 0 auto 30px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem;
+            color: var(--accent);
+            position: relative;
+        }
+        .skill-icon-wrap::after {
+            content: ''; position: absolute; inset: -5px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            border-left-color: transparent;
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .skill-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; }
+        
+        .skill-bar-container {
+            text-align: left;
+            margin-top: 15px;
+        }
+        .sb-label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; font-weight: 600; }
+        .sb-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .sb-fill { height: 100%; background: var(--accent); border-radius: 10px; width: 0; transition: width 1.5s ease; }
+
+        /* ===================================================
+           PROJECTS (NEW SECTION - DEVELOPER FOCUS)
+        =================================================== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+        }
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        .term-dots { display: flex; gap: 6px; margin-right: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .term-title { font-family: monospace; font-size: 0.8rem; color: #aaa; }
+        .project-content { padding: 25px; }
+        .project-content h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 10px; }
+        .code-comment { font-family: monospace; color: #6a9955; font-size: 0.9rem; margin-bottom: 20px; display: block; }
+        .tags { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tags span { 
+            background: rgba(255,255,255,0.1); 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-family: monospace;
+            color: var(--accent);
+        }
+        .btn-project {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 8px 20px;
+            font-family: monospace;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .btn-project:hover { background: var(--accent); color: var(--bg-primary); }
+
+        /* ===================================================
+           PRODUCTS (LOOT DROP)
+        =================================================== */
+        .loot-scroller {
+            display: flex;
+            overflow-x: auto;
+            gap: 30px;
+            padding: 20px 5%;
+            scroll-snap-type: x mandatory;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .loot-scroller::-webkit-scrollbar { display: none; }
+
+        .loot-card {
+            min-width: 300px;
+            height: 400px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            scroll-snap-align: center;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+        .loot-card:hover { transform: scale(1.02); border-color: var(--accent-secondary); }
+        
+        .loot-img { width: 100%; height: 60%; object-fit: cover; }
+        .loot-info { padding: 20px; }
+        .loot-tag { font-size: 0.8rem; color: var(--accent-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        .loot-title { font-family: var(--font-display); font-size: 1.5rem; margin: 5px 0 10px; }
+        .loot-price { font-weight: bold; font-size: 1.2rem; }
+        .btn-loot {
+            position: absolute; bottom: 20px; right: 20px;
+            background: #fff; color: #000;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-loot:hover { background: var(--accent); color: #fff; }
+
+        /* ===================================================
+           COMMUNITY (MARQUEE)
+        =================================================== */
+        .marquee {
+            background: var(--bg-tertiary);
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+        }
+        .marquee-item {
+            display: inline-block;
+            margin: 0 40px;
+            font-family: var(--font-gaming);
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+        .marquee-item span { color: var(--accent); margin-right: 10px; }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ===================================================
+           FOOTER
+        =================================================== */
+        footer {
+            background: #000;
+            padding: 80px 0 30px;
+            border-top: 1px solid var(--glass-border);
+            /* Add padding bottom for mobile nav so content isn't hidden */
+            transition: 0.3s;
+        }
+        .footer-content {
+            width: 90%; max-width: 1400px; margin: auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
+        }
+        .footer-left h2 { font-family: var(--font-display); font-size: 3rem; text-transform: uppercase; margin-bottom: 20px; }
+        .footer-left p { color: var(--text-secondary); max-width: 400px; margin-bottom: 30px; }
+        
+        .socials { display: flex; gap: 20px; }
+        .social-btn {
+            width: 50px; height: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; transition: 0.3s;
+        }
+        .social-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+        .footer-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .footer-links a { color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        .footer-links a:hover { color: var(--accent); padding-left: 10px; }
+
+        .copyright { text-align: center; margin-top: 80px; color: #555; font-size: 0.8rem; }
+
+        /* ===================================================
+           RESPONSIVE - APP MODE
+        =================================================== */
+        @media (max-width: 1024px) {
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .bento-large, .bento-medium { grid-column: span 1; grid-row: span 1; height: 300px; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            /* General */
+            .header-container { width: 95%; }
+            nav { display: none; } /* Hide Desktop Nav */
+            
+            /* Show Mobile Bottom Nav */
+            .mobile-bottom-nav { display: block; }
+            
+            /* Add padding to body/footer so content isn't covered by bottom nav */
+            body { padding-bottom: calc(var(--bottom-nav-height) + 20px); }
+            footer { padding-bottom: calc(var(--bottom-nav-height) + 50px); }
+
+            /* Responsive Hero Adjustments */
+            .carousel .list .item .content { 
+                padding-right: 0; 
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 95%;
+            }
+            .carousel .list .item .title { font-size: 2.5em; line-height: 1.1; margin-bottom: 10px; }
+            .carousel .list .item .author { letter-spacing: 5px; font-size: 0.8em; }
+            .carousel .list .item .des { font-size: 0.9em; max-width: 100%; padding: 10px; display: none; /* Hide desc on very small screens to fit */ }
+            @media (min-height: 700px) { .carousel .list .item .des { display: block; } }
+
+            .carousel .list .item .buttons { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px; }
+            .carousel .list .item .buttons button { letter-spacing: 1px; font-size: 0.9em; }
+
+            .stats-container { flex-direction: column; gap: 40px; }
+            .arrows { display: none; } /* Hide arrows, swipe needed ideally, or just rely on thumbnails/autoplay */
+            .thumbnail { bottom: 85px; gap: 10px; } /* Move above bottom nav */
+            .thumbnail .item { width: 60px; height: 90px; }
+        }
+    </style>
 </head>
 <body>
-<div class="loader-wrapper" id="loader">
-<div class="pixel-loader">
-<span></span><span></span><span></span>
-<span></span><span></span><span></span>
-<span></span><span></span><span></span>
-</div>
-</div>
 
+    <!-- PRELOADER -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-text">INITIALIZING SYSTEM...</div>
+    </div>
 
-<!-- ② All real content wrapped here -->
-<div id="site-content">
-<header class="site-header">
-<div class="container header-container">
-<div class="logo">
-<a href="index.html"><img src="assests/home/home logo.jpg" alt= "On for a Cause Logo"></a>
-</div>
+    <!-- HEADER (TOP BAR - Logo & Actions Only) -->
+    <header id="navbar">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-ghost"></i> PIXEL<span>FLIX</span>
+            </div>
+            <!-- Desktop Nav (Hidden on Mobile) -->
+            <nav>
+                <ul>
+                    <li><a href="#hero">Base</a></li>
+                    <li><a href="#about">Loadout</a></li>
+                    <li><a href="#projects">Deployments</a></li>
+                    <li><a href="#skills">Arsenal</a></li>
+                    <li><a href="#shop">Loot</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <div class="theme-switch" id="theme-toggle"><i class="fas fa-moon"></i></div>
+                <a href="#" class="btn-donate">Donate</a>
+            </div>
+        </div>
+    </header>
 
-<!-- Hamburger Icon (visible on mobile) -->
-<div class="hamburger" id="hamburger">
-<span></span>
-<span></span>
-<span></span>
-</div>
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="mobile-bottom-nav">
+        <div class="bottom-nav-links">
+            <a href="#hero" class="nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Base</span>
+            </a>
+            <a href="#projects" class="nav-item">
+                <i class="fas fa-code"></i>
+                <span>Code</span>
+            </a>
+            <a href="#about" class="nav-item">
+                <i class="fas fa-user-astronaut"></i>
+                <span>Info</span>
+            </a>
+            <a href="#shop" class="nav-item">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Loot</span>
+            </a>
+        </div>
+    </nav>
 
-<!-- Navigation Links -->
-<nav>
-<ul class="nav-links" id="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="https://blog.pixelflix.tech/">Blog</a></li>
-<li><a href="https://digital_product.pixelflix.tech">Digital Products</a></li>
-<li><a href="https://merch.pixelflix.tech">Merchandise</a></li>
-<li><a href="donation/donate.html" class="donate-btn">Donate</a></li>
-</ul>
-</nav>
-</div>
-</header>
+    <!-- 1. HERO SECTION (CAROUSEL) -->
+    <div class="carousel" id="hero">
+        <div class="list">
+            <!-- Item 1: CODING (Swapped to be first/active) -->
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="author">DEV MODE</div>
+                    <div class="title">CODE <span style="color:var(--accent-secondary)">MASTER</span></div>
+                    <div class="topic">FULL STACK</div>
+                    <div class="des">
+                        Building the future of digital interaction. From React to Python, we craft the logic behind the magic.
+                    </div>
+                    <div class="buttons">
+                        <button>GITHUB</button>
+                        <button>PROJECTS</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Item 2: GAMING -->
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=2000&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="author">PIXELFLIX</div>
+                    <div class="title">LEVEL UNLOCKED</div>
+                    <div class="topic">GAMING</div>
+                    <div class="des">
+                        High-octane gameplay, precision coding, and cinematic editing. Join the stream and fuel the mission.
+                    </div>
+                    <div class="buttons">
+                        <button>WATCH</button>
+                        <button>SUBSCRIBE</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Item 3: EDITING -->
+            <div class="item">
+                <img src="assests/home/hero/image/video editing.jpg" />
+                <div class="content">
+                    <div class="author">CREATOR</div>
+                    <div class="title">CINEMATIC</div>
+                    <div class="topic">EDITS</div>
+                    <div class="des">
+                        Creating cinematic masterpieces. Every cut, every transition, telling a story that captivates.
+                    </div>
+                    <div class="buttons">
+                        <button>PORTFOLIO</button>
+                        <button>CONTACT</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Item 4: CHAMPION -->
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2000&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="author">CHAMPION</div>
+                    <div class="title">TOURNAMENT</div>
+                    <div class="topic">READY</div>
+                    <div class="des">
+                        Rising through the ranks. Competing and winning in top-tier tournaments.
+                    </div>
+                    <div class="buttons">
+                        <button>STATS</button>
+                        <button>SUPPORT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<main>
-<!-- HERO SECTION: Bold introduction with immersive animated background -->
-<div class="carousel">
-<!-- list item -->
-<div class="list">
-<div class="item">
-<img src="assests/home/hero/image/gaming.jpg">
-<div class="content">
-<div class="author">PixelFlixLive</div>
-<div class="title">Enthusiast</div>
-<div class="topic">Gaming</div>
-<div class="des">
-Meet Me!, a dynamic boy gamer whose live streams radiate power and precision. His electrifying gameplay and nonstop skill upgrades captivate viewers, each donation fueling his relentless quest for mastery.
-</div>
-<div class="buttons">
-<button>Donate</button>
-<button>SUBSCRIBE</button>
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/coding.jpg">
-<div class="content">
-<div class="author">Nasir</div>
-<div class="title">Mastering</div>
-<div class="topic">Coding</div>
-<div class="des">
-Meet Me!: a daring boy gamer who levels up both his gameplay and his coding skills daily. His streams ignite excitement as he fuses epic battle strategies with master-level code upgrades, all powered by relentless passion and generous donations.
-</div>
-<div class="buttons">
-<button>LinkedIn</button>
-<button>Donate</button>
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/video editing.jpg">
-<div class="content">
-<div class="author">Nasir Hussain</div>
-<div class="title">journey to</div>
-<div class="topic">Pro Video Editor</div>
-<div class="des">
-Meet Me!: a visionary boy gamer who levels up his video editing skills daily. His streams blend high-impact gameplay with cinematic edits that captivate his audience, all fueled by passion and generous donations.
-</div>
-<div class="buttons">
-<button>LinkedIn!</button>
-<button>Donate</button>
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/img4.jpg">
-<div class="content">
-<div class="author">Md Nasir Hussain</div>
-<div class="title">Competition</div>
-<div class="topic">Participation & Winning</div>
-<div class="des">
-Meet Me!: a fierce boy gamer rising through the ranks by competing—and winning—in top tournaments & Competition. Every stream is a glimpse into his journey to greatness, powered by skill, determination, and the support of his community.
-</div>
-<div class="buttons">
-<button>LinkedIn</button>
-<button>Donation</button>
-</div>
-</div>
-</div>
-</div>
-<!-- list thumnail -->
-<div class="thumbnail">
-<div class="item">
-<img src="assests/home/hero/image/gaming.jpg">
-<div class="content">
-<div class="title">
-Gamer
-</div>
-<div class="description">
-ItsMe!
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/coding.jpg">
-<div class="content">
-<div class="title">
-Coder
-</div>
-<div class="description">
-Updating Daily
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/video editing.jpg">
-<div class="content">
-<div class="title">
-Video Editing
-</div>
-<div class="description">
-Progessing Daily
-</div>
-</div>
-</div>
-<div class="item">
-<img src="assests/home/hero/image/img4.jpg">
-<div class="content">
-<div class="title">
-Competition
-</div>
-<div class="description">
-Winner!
-</div>
-</div>
-</div>
-</div>
-<!-- next prev -->
+        <div class="thumbnail">
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="title">Coding</div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=400&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="title">Gaming</div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="assests/home/hero/image/video editing.jpg" />
+                <div class="content">
+                    <div class="title">Editing</div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=400&auto=format&fit=crop" />
+                <div class="content">
+                    <div class="title">Win</div>
+                </div>
+            </div>
+        </div>
 
-<div class="arrows">
-<button id="prev"><-</button>
-<button id="next">-></button>
-</div>
-<!-- time running -->
-<div class="time"></div>
-</div>
+        <div class="arrows">
+            <button id="prev"><i class="fas fa-chevron-left"></i></button>
+            <button id="next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div class="time"></div>
+    </div>
 
+    <!-- 2. ABOUT / PERSONA (BENTO GRID - DEV FOCUSED) -->
+    <section class="section-padding" id="about">
+        <div class="section-header reveal">
+            <h2>The <span class="text-accent">Loadout</span></h2>
+            <p>Engineer by day, Gamer by night. Dominating the server and the codebase.</p>
+        </div>
+        
+        <div class="bento-grid">
+            <!-- Full Stack is now LARGE -->
+            <div class="bento-item bento-large reveal">
+                <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?q=80&w=1000" class="bento-bg" alt="Coder">
+                <div class="bento-content">
+                    <i class="fas fa-code bento-icon" style="color:var(--accent-secondary)"></i>
+                    <h3 class="bento-title">Full Stack Engineer</h3>
+                    <p class="bento-desc">Architecting scalable web applications using modern frameworks. React, Node.js, Python, and Cloud Infrastructure expertise.</p>
+                </div>
+            </div>
+            <!-- Gamer is now NORMAL -->
+            <div class="bento-item reveal">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1000" class="bento-bg" alt="Gamer">
+                <div class="bento-content">
+                    <i class="fas fa-gamepad bento-icon"></i>
+                    <h3 class="bento-title">Pro Gamer</h3>
+                    <p class="bento-desc">Ranked top 0.1% in competitive FPS. Strategy leader.</p>
+                </div>
+            </div>
+            <div class="bento-item reveal">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000" class="bento-bg" alt="Lens">
+                <div class="bento-content">
+                    <i class="fas fa-camera bento-icon" style="color:#ff0055"></i>
+                    <h3 class="bento-title">Content</h3>
+                    <p class="bento-desc">Cinematography & Video Production.</p>
+                </div>
+            </div>
+            <div class="bento-item bento-medium reveal">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1000" class="bento-bg" alt="Community">
+                <div class="bento-content">
+                    <i class="fas fa-users bento-icon" style="color:#ffd700"></i>
+                    <h3 class="bento-title">Community Leader</h3>
+                    <p class="bento-desc">Hosting tournaments, charity events, and building a safe space for gamers worldwide.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- NEW SECTION: PROJECTS / DEPLOYMENTS -->
+    <section class="section-padding" id="projects">
+        <div class="section-header reveal">
+            <h2>System <span class="text-accent">Logs</span></h2>
+            <p>Recent commits, open source contributions, and deployed artifacts.</p>
+        </div>
+        <div class="projects-grid">
+            <!-- Project 1 -->
+            <div class="project-card reveal">
+                <div class="terminal-header">
+                    <div class="term-dots">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <span class="term-title">main.py</span>
+                </div>
+                <div class="project-content">
+                    <h3>AI Pathfinding Visualizer</h3>
+                    <span class="code-comment">// A* Algorithm implementation in Python</span>
+                    <div class="tags">
+                        <span>Python</span><span>PyGame</span><span>AI</span>
+                    </div>
+                    <button class="btn-project">View Repo</button>
+                </div>
+            </div>
+            <!-- Project 2 -->
+            <div class="project-card reveal">
+                <div class="terminal-header">
+                    <div class="term-dots">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <span class="term-title">app.tsx</span>
+                </div>
+                <div class="project-content">
+                    <h3>E-Commerce Dashboard</h3>
+                    <span class="code-comment">// React + Node.js Full Stack App</span>
+                    <div class="tags">
+                        <span>React</span><span>Node</span><span>MongoDB</span>
+                    </div>
+                    <button class="btn-project">Live Demo</button>
+                </div>
+            </div>
+            <!-- Project 3 -->
+            <div class="project-card reveal">
+                <div class="terminal-header">
+                    <div class="term-dots">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    </div>
+                    <span class="term-title">bot.js</span>
+                </div>
+                <div class="project-content">
+                    <h3>Discord Stream Bot</h3>
+                    <span class="code-comment">// Automating stream alerts & moderation</span>
+                    <div class="tags">
+                        <span>Discord.js</span><span>API</span><span>Heroku</span>
+                    </div>
+                    <button class="btn-project">Invite</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- 3. LIVE STATS STRIP -->
+    <div class="stats-strip">
+        <div class="stats-bg-pattern"></div>
+        <div class="stats-container">
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="1500">0</div>
+                <div class="stat-label">COMMITS PUSHED</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">REPOS CREATED</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="8000">0</div>
+                <div class="stat-label">COFFEE CONSUMED</div>
+            </div>
+            <div class="stat-item reveal">
+                <div class="stat-number" data-target="12">0</div>
+                <div class="stat-label">TOURNAMENTS WON</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- 4. SKILLS (ARSENAL) -->
+    <section class="section-padding" id="skills">
+        <div class="section-header reveal">
+            <h2>The <span class="text-accent">Arsenal</span></h2>
+            <p>Equipped with the latest tech stack and creative tools.</p>
+        </div>
 
-<!--============================== SKILLS SECTION ===============================-->
-<section class="skills-section">
-<h2 class="section-heading">My Skills & Levels</h2>
+        <div class="arsenal-grid">
+            <!-- Skill 1: DEVELOPMENT (Moved to Top) -->
+            <div class="skill-card reveal">
+                <div class="skill-icon-wrap" style="color:var(--accent-secondary); border-color:var(--accent-secondary)"><i class="fab fa-js"></i></div>
+                <h3 class="skill-title">Development</h3>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>JavaScript / React</span><span>95%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="background:var(--accent-secondary); width:0" data-width="95%"></div></div>
+                </div>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>Python / Backend</span><span>85%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="background:var(--accent-secondary); width:0" data-width="85%"></div></div>
+                </div>
+            </div>
 
-<!-- Main Container that splits into left & right -->
-<div class="skills-content">
-<!-- LEFT SIDE: Animated PNG or Embedded Content -->
-<div class="left-column">
-<!-- Replace below img src with your actual animated PNG or any embed -->
-<img src="assests/home/pixelflix logo.png"
-alt="Animated PNG"
-class="animated-image" />
-</div>
+            <!-- Skill 2 -->
+            <div class="skill-card reveal">
+                <div class="skill-icon-wrap"><i class="fas fa-crosshairs"></i></div>
+                <h3 class="skill-title">FPS & Strategy</h3>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>Aim Accuracy</span><span>95%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="width:0" data-width="95%"></div></div>
+                </div>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>Map Knowledge</span><span>90%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="width:0" data-width="90%"></div></div>
+                </div>
+            </div>
 
-<!-- RIGHT SIDE: White box that contains skill cards -->
-<div class="right-column white-container">
-<div class="cards">
-<!-- Skill Cards (reusing your original skill-card markup) -->
-<div class="skill-card" data-skill="Gaming">
-<h3>Gaming</h3>
-<div class="circular-progress">
-<svg viewBox="0 0 120 120">
-<circle class="progress-ring outer" cx="60" cy="60" r="50" />
-<circle class="progress-ring middle" cx="60" cy="60" r="40" />
-<circle class="progress-ring inner" cx="60" cy="60" r="30" />
-<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="progress-text"></text>
-</svg>
-</div>
-</div>
+            <!-- Skill 3 -->
+            <div class="skill-card reveal">
+                <div class="skill-icon-wrap" style="color:#ff0055; border-color:#ff0055"><i class="fas fa-film"></i></div>
+                <h3 class="skill-title">Production</h3>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>Premiere Pro</span><span>92%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="background:#ff0055; width:0" data-width="92%"></div></div>
+                </div>
+                <div class="skill-bar-container">
+                    <div class="sb-label"><span>After Effects</span><span>80%</span></div>
+                    <div class="sb-track"><div class="sb-fill" style="background:#ff0055; width:0" data-width="80%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="skill-card" data-skill="Coding">
-<h3>Coding</h3>
-<div class="circular-progress">
-<svg viewBox="0 0 120 120">
-<circle class="progress-ring outer" cx="60" cy="60" r="50" />
-<circle class="progress-ring middle" cx="60" cy="60" r="40" />
-<circle class="progress-ring inner" cx="60" cy="60" r="30" />
-<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="progress-text"></text>
-</svg>
-</div>
-</div>
+    <!-- 5. SHOP (LOOT DROP) -->
+    <section class="section-padding" id="shop" style="background: var(--bg-secondary);">
+        <div class="section-header reveal">
+            <h2>Loot <span style="color:var(--accent-secondary)">Drop</span></h2>
+            <p>Exclusive merch and digital assets to upgrade your setup.</p>
+        </div>
 
-<div class="skill-card" data-skill="Video Editing">
-<h3>Video Editing</h3>
-<div class="circular-progress">
-<svg viewBox="0 0 120 120">
-<circle class="progress-ring outer" cx="60" cy="60" r="50" />
-<circle class="progress-ring middle" cx="60" cy="60" r="40" />
-<circle class="progress-ring inner" cx="60" cy="60" r="30" />
-<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="progress-text"></text>
-</svg>
-</div>
-</div>
+        <div class="loot-scroller">
+            <div class="loot-card reveal">
+                <img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?q=80&w=1000" class="loot-img" alt="Merch">
+                <div class="loot-info">
+                    <span class="loot-tag">Apparel</span>
+                    <h4 class="loot-title">Pixel Hoodie</h4>
+                    <span class="loot-price">$45.00</span>
+                    <div class="btn-loot"><i class="fas fa-shopping-cart"></i></div>
+                </div>
+            </div>
+            <div class="loot-card reveal">
+                <img src="https://images.unsplash.com/photo-1624823183488-64478149d5c4?q=80&w=1000" class="loot-img" alt="Digital">
+                <div class="loot-info">
+                    <span class="loot-tag">Digital</span>
+                    <h4 class="loot-title">Stream Pack V2</h4>
+                    <span class="loot-price">$20.00</span>
+                    <div class="btn-loot"><i class="fas fa-download"></i></div>
+                </div>
+            </div>
+            <div class="loot-card reveal">
+                <img src="https://images.unsplash.com/photo-1595225476474-87563907a212?q=80&w=1000" class="loot-img" alt="Keyboard">
+                <div class="loot-info">
+                    <span class="loot-tag">Hardware</span>
+                    <h4 class="loot-title">Custom Keycaps</h4>
+                    <span class="loot-price">$35.00</span>
+                    <div class="btn-loot"><i class="fas fa-shopping-cart"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="skill-card" data-skill="Other">
-<h3>Other</h3>
-<div class="circular-progress">
-<svg viewBox="0 0 120 120">
-<circle class="progress-ring outer" cx="60" cy="60" r="50" />
-<circle class="progress-ring middle" cx="60" cy="60" r="40" />
-<circle class="progress-ring inner" cx="60" cy="60" r="30" />
-<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="progress-text"></text>
-</svg>
-</div>
-</div>
-</div>
-</div> <!-- .right-column -->
-</div> <!-- .skills-content -->
-</section>
+    <!-- COMMUNITY MARQUEE -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <div class="marquee-item"><span>//</span> JOIN THE DISCORD</div>
+            <div class="marquee-item"><span>//</span> LIVE EVERY DAY AT 8PM EST</div>
+            <div class="marquee-item"><span>//</span> DONATIONS SUPPORT THE DREAM</div>
+            <div class="marquee-item"><span>//</span> NEW MERCH DROP FRIDAY</div>
+            <div class="marquee-item"><span>//</span> SUBSCRIBE FOR EMOTES</div>
+            <div class="marquee-item"><span>//</span> JOIN THE DISCORD</div>
+            <div class="marquee-item"><span>//</span> LIVE EVERY DAY AT 8PM EST</div>
+            <div class="marquee-item"><span>//</span> DONATIONS SUPPORT THE DREAM</div>
+        </div>
+    </div>
 
-<!-- Modal for Detailed Sub-Skills -->
-<div class="modal-overlay" id="modalOverlay">
-<div class="modal" id="skillsDetailModal">
-<button class="close-modal" id="closeModal">&times;</button>
-<h3 id="modalSkillTitle">Skill Details</h3>
-<div class="sub-skills" id="subSkillsContainer">
-<!-- Sub–skill items are injected dynamically -->
-</div>
-<!-- Updated Average Chart using SVG -->
-<div class="average-chart" id="averageChartContainer">
-<svg viewBox="0 0 120 120" class="chart-svg">
-<circle class="chart-bg" cx="60" cy="60" r="54" />
-<circle class="chart-progress" cx="60" cy="60" r="54" />
-<text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" class="chart-number" id="chartNumber"></text>
-</svg>
-<div class="chart-label">Average</div>
-</div>
-</div>
-</div>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <h2>Pixel<span style="color:var(--accent)">Flix</span></h2>
+                <p>Innovating the space between gaming, technology, and entertainment. Join us on the journey to greatness.</p>
+                <div class="socials">
+                    <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-twitch"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-links">
+                    <a href="#">Home</a>
+                    <a href="#">About</a>
+                    <a href="#">Schedule</a>
+                    <a href="#">Sponsors</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+        <p class="copyright">&copy; 2025 PixelFlixLive. Engineered for performance.</p>
+    </footer>
 
+    <script>
+        // =======================
+        // LOADER
+        // =======================
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.visibility = 'hidden';
+                }, 500);
+            }, 1000);
+        }
 
+        // =======================
+        // SCROLL REVEAL & HEADER
+        // =======================
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('navbar');
+            header.classList.toggle('scrolled', window.scrollY > 50);
 
+            // Reveal Elements
+            const reveals = document.querySelectorAll('.reveal');
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
 
+            reveals.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                    
+                    // Trigger Skill Bars if inside
+                    const bars = reveal.querySelectorAll('.sb-fill');
+                    bars.forEach(bar => {
+                        bar.style.width = bar.getAttribute('data-width');
+                    });
 
+                    // Trigger Counters if inside
+                    const counters = reveal.querySelectorAll('.stat-number');
+                    counters.forEach(counter => {
+                        if(counter.innerText === '0') {
+                            const target = +counter.getAttribute('data-target');
+                            const inc = target / 100;
+                            const updateCount = () => {
+                                const c = +counter.innerText;
+                                if (c < target) {
+                                    counter.innerText = Math.ceil(c + inc);
+                                    setTimeout(updateCount, 20);
+                                } else {
+                                    counter.innerText = target;
+                                    if(target > 1000) counter.innerText = (target/1000).toFixed(1) + 'k';
+                                }
+                            };
+                            updateCount();
+                        }
+                    });
+                }
+            });
 
+            // Active State for Bottom Nav based on scroll position
+            const sections = document.querySelectorAll('section, .carousel');
+            const navItems = document.querySelectorAll('.nav-item');
 
-<!-- ABOUT/MISSION SECTION: Introduce your journey and share your mission -->
-<!-- Dark background wrapper -->
-<div class="mission-bg">
-<section class="mission container" id="mission-section">
-<div class="mission-content">
-<h2>My Journey & Mission</h2>
-<p>
-Blending the art of <span class="highlight">gaming</span> with the pulse of <span class="highlight">technology</span>,
-I create experiences that resonate. Every donation fuels not only my education but also a bigger dream—
-to innovate and inspire the future of gaming content with heart, creativity, and impact.
-</p>
-</div>
-</section>
-</div>
-</main>
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-<footer>
-  <div class="social-icons">
-    <a href="https://www.facebook.com/profile.php?id=61574057198229" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-    <a href="https://www.instagram.com/pixelflixlive/" class="social-icon"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.youtube.com/@PixelFlixLive" class="social-icon"><i class="fab fa-youtube"></i></a>
-    <a href="https://www.linkedin.com/in/pixelflixlive/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-  </div>
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').includes(current)) {
+                    item.classList.add('active');
+                }
+            });
+        });
 
-  <!-- Footer Buttons -->
-  <div class="footer-buttons">
-    <a href="#" class="footer-meeting" target="_blank">Donate</a>
-    <a href="#" class="footer-portfolio" target="_blank">Subscribe</a>
-  </div>
+        // =======================
+        // CAROUSEL LOGIC
+        // =======================
+        let nextDom = document.getElementById('next');
+        let prevDom = document.getElementById('prev');
 
-  <p>&copy; 2025 PixelFlixLive. All rights reserved.</p>
-</footer>
-</div>
+        let carouselDom = document.querySelector('.carousel');
+        let SliderDom = carouselDom.querySelector('.carousel .list');
+        let thumbnailBorderDom = document.querySelector('.carousel .thumbnail');
+        let thumbnailItemsDom = thumbnailBorderDom.querySelectorAll('.item');
+        let timeDom = document.querySelector('.carousel .time');
 
-<!-- ③ Loader script (after content) -->
-<!-- <script src="home/preloader.js"></script> -->
-<script src="home/script.js"></script>
+        thumbnailBorderDom.appendChild(thumbnailItemsDom[0]);
+        let timeRunning = 3000;
+        let timeAutoNext = 7000;
+
+        nextDom.onclick = function(){
+            showSlider('next');    
+        }
+
+        prevDom.onclick = function(){
+            showSlider('prev');    
+        }
+        let runTimeOut;
+        let runNextAuto = setTimeout(() => {
+            nextDom.click();
+        }, timeAutoNext)
+
+        function showSlider(type){
+            let  SliderItemsDom = SliderDom.querySelectorAll('.carousel .list .item');
+            let thumbnailItemsDom = document.querySelectorAll('.carousel .thumbnail .item');
+            
+            if(type === 'next'){
+                SliderDom.appendChild(SliderItemsDom[0]);
+                thumbnailBorderDom.appendChild(thumbnailItemsDom[0]);
+                carouselDom.classList.add('next');
+            }else{
+                SliderDom.prepend(SliderItemsDom[SliderItemsDom.length - 1]);
+                thumbnailBorderDom.prepend(thumbnailItemsDom[thumbnailItemsDom.length - 1]);
+                carouselDom.classList.add('prev');
+            }
+            clearTimeout(runTimeOut);
+            runTimeOut = setTimeout(() => {
+                carouselDom.classList.remove('next');
+                carouselDom.classList.remove('prev');
+            }, timeRunning);
+
+            clearTimeout(runNextAuto);
+            runNextAuto = setTimeout(() => {
+                nextDom.click();
+            }, timeAutoNext)
+        }
+
+        // =======================
+        // THEME TOGGLE
+        // =======================
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        themeToggle.addEventListener('click', () => {
+            const current = htmlElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            htmlElement.setAttribute('data-theme', next);
+            themeToggle.innerHTML = next === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        });
+
+    </script>
 </body>
 </html>
